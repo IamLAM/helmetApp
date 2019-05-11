@@ -81,7 +81,7 @@ app.use(helmet.xssFilter());
 
 // Use `helmet.noSniff()`
 
-
+app.use(helmet.noSniff());
 
 /** 6) Prevent IE from opening *untrusted* HTML - `helmet.ieNoOpen()` */
 
@@ -94,7 +94,7 @@ app.use(helmet.xssFilter());
 
 // Use `helmet.ieNoOpen()`
 
-
+app.use(helmet.ieNoOpen());
 
 /**  7) Ask browsers to access your site via HTTPS only - `helmet.hsts()` */
 
@@ -113,7 +113,7 @@ app.use(helmet.xssFilter());
 // policy we will intercept and restore the header, after inspecting it for testing.
 
 var ninetyDaysInMilliseconds = 90*24*60*60*1000;
-
+app.use(helmet.hsts({maxAge: ninetyDaysInMilliseconds, force: true}));
 
 //**Note**:
 // Configuring HTTPS on a custom website requires the acquisition of a domain,
@@ -131,7 +131,7 @@ var ninetyDaysInMilliseconds = 90*24*60*60*1000;
 // DNS prefetching, at the cost of a performance penalty.
 
 // Use `helmet.dnsPrefetchControl()`
-
+app.use(helmet.dnsPrefetchControl());
 
 
 /** 9) Disable Client-Side Caching - `helmet.noCache()` */
@@ -145,7 +145,7 @@ var ninetyDaysInMilliseconds = 90*24*60*60*1000;
 // Use helmet.noCache()
 
 
-
+app.use(helmet.noCache());
 /** 10) Content Security Policy - `helmet.contentSecurityPolicy()` */
 
 // This challenge highlights one promising new defense that can significantly reduce
@@ -174,7 +174,17 @@ var ninetyDaysInMilliseconds = 90*24*60*60*1000;
 // in the `"'self'"` keyword, the single quotes are part of the keyword itself, 
 // so it needs to be enclosed in **double quotes** to be working.
 
+app.use(helmet.contentSecurityPolicy({
+  
+   // enable and configure
+  directives: {
+  defaultSrc: ["'self'"],     
+  scriptSrc:["'self'", 'trusted-cdn.com']
+  }
+  }
 
+
+));
 
 /** TIP: */ 
 
